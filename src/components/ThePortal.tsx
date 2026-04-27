@@ -11,7 +11,7 @@ import * as THREE from 'three'
 import axios from 'axios'
 
 // ── API Config ────────────────────────────────────────────────────────────────
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://crazyweb-backend.onrender.com'
 
 // ── Toast Notification ────────────────────────────────────────────────────────
 interface ToastData {
