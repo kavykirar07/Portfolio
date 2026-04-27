@@ -1,0 +1,39 @@
+# --- CrazyWeb Studio Master Gitignore ---
+
+# Dependencies (Ignore from root and all subfolders)
+node_modules/
+**/node_modules/
+
+# Environment variables (SECURITY: Never push these!)
+.env
+.env.local
+.env.*
+**/.env
+**/.env.*
+
+# Build & Production outputs
+dist/
+build/
+**/dist/
+**/build/
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# OS generated files
+Thumbs.db
+desktop.ini
+
+# Optional: Firebase or other tool configs
+.firebase/
+.cache/
