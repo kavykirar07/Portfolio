@@ -65,7 +65,7 @@ const ChatbotWidget: React.FC = () => {
           id: Date.now().toString() + '-err',
           role: 'assistant',
           content:
-            'Our AI is offline right now — add your OPENAI_API_KEY to `.env` and run `npm run server` to activate it. In the meantime, email us at hello@crazyweb.studio.',
+            'Transmission error. Please try again.',
         },
       ])
     } finally {
