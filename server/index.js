@@ -2,17 +2,18 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import OpenAI from 'openai'
-import mongoose from 'mongoose' // Ye line ab add hui hai
+import mongoose from 'mongoose'
 
 const app = express()
+// Render usually uses port 10000, local uses 3001
 const PORT = process.env.PORT || 3001
 
-// Database Connection Logic
+// --- DATABASE CONNECTION ---
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ CrazyWeb Database Connected!"))
   .catch(err => console.error("❌ DB Connection Error:", err))
 
-// Lead Schema (Contact form ka data structure)
+// --- LEAD SCHEMA ---
 const leadSchema = new mongoose.Schema({
   name: String,
   email: String,
@@ -21,14 +22,31 @@ const leadSchema = new mongoose.Schema({
 })
 const Lead = mongoose.model('Lead', leadSchema)
 
-app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:4173'] }))
+// --- MIDDLEWARE ---
+// CORS is now open for your Vercel deployment
+app.use(cors())
 app.use(express.json())
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 const SYSTEM_PROMPT = `You are the CrazyWeb.Studio AI — the digital voice of Indore's most elite 3D web agency. Persona: Confident, intelligent, premium.`
 
-// --- NEW: Contact API Route ---
+// --- ROUTES ---
+
+// 1. Root Route (Render Health Check ke liye ZAROORI hai)
+app.get('/', (req, res) => {
+  res.status(200).send('CrazyWeb API is hyperspace ready! 🚀');
+});
+
+// 2. Health Status API
+app.get('/api/health', (_req, res) => {
+  res.json({
+    status: 'ok',
+    db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  })
+})
+
+// 3. Contact API Route
 app.post('/api/contact', async (req, res) => {
   try {
     const { name, email, message } = req.body
@@ -39,11 +57,12 @@ app.post('/api/contact', async (req, res) => {
 
     res.status(201).json({ success: true, message: "Lead captured in hyperspace! 🚀" })
   } catch (err) {
+    console.error("Lead Save Error:", err)
     res.status(500).json({ error: "Failed to save lead." })
   }
 })
 
-// --- EXISTING: AI Chat Route ---
+// 4. AI Chat Route
 app.post('/api/chat', async (req, res) => {
   const { messages } = req.body
   if (!messages || !Array.isArray(messages)) return res.status(400).json({ error: 'messages array is required' })
@@ -63,11 +82,8 @@ app.post('/api/chat', async (req, res) => {
   }
 })
 
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected' })
-})
-
-app.listen(PORT, () => {
-  console.log(`\n🚀 CrazyWeb.Studio API running on http://localhost:${PORT}`)
+// --- SERVER START ---
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`\n🚀 CrazyWeb.Studio API running on port ${PORT}`)
   console.log(`   AI Status: ${process.env.OPENAI_API_KEY ? '✅ Configured' : '⚠️ Missing Key'}`)
 })
