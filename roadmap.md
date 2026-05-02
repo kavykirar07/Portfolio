@@ -78,6 +78,7 @@ We are a core team of 5 Specialists (**The Crazy 5**) based in Indore, combining
 - [ ] Open a dedicated business bank account. **(Owner: Rainmaker)**
 - [ ] Setup invoicing tool: **Zoho Invoice** (free tier) or **Razorpay Payment Links** for receiving payments. **(Owner: Rainmaker)**
 - [ ] Draft standard **NDA, SLA, and Project Contract** template via PandaDoc or a local CA. **(Owner: Rainmaker)**
+  - **Contract Essentials:** Must include 50% kill-fee, maximum 2 major revision rounds (hourly billing after), and IP transfer clause (upon full payment only).
 
 ---
 
@@ -154,18 +155,22 @@ We are a core team of 5 Specialists (**The Crazy 5**) based in Indore, combining
   - GitHub repo with `main` (prod) and `dev` branch protection rules.
 - [ ] **3D & Animation Integration** **(Owner: 3D Developer)**
   - Configure `@react-three/fiber` + `@react-three/drei`.
+  - **Architecture Boundary:** Use React Three Fiber (R3F) for core reactive scenes (physics, particles) and Spline ONLY as embedded IFrames for isolated decorative heroes. Do NOT mix both in the same WebGL canvas.
   - Integrate GSAP for snap-scroll transitions + staggered reveals.
   - Integrate Framer Motion for micro-interactions and page transitions.
+  - **Mobile 3D Fallback:** Implement WebGL tier detection (`renderer.capabilities`). If `maxTextureSize < 4096` or frame drops below 30fps consistently, gracefully degrade to 2D WebP/video placeholders.
 - [ ] **Deployment Pipeline** — CI/CD via **Vercel** (Frontend) & **Railway** (Backend API). **(Owner: Full-Stack Engineer)**
   - Auto-deploy from `main` on push.
   - Environment variables configured for prod/dev.
-- [ ] **Performance Budget** — Enforce targets from Day 1. **(Owner: QA/Content)**
+- [ ] **Performance Budget & 3D Optimization** — Enforce targets from Day 1. **(Owner: QA/Content)**
   - 60fps animations (validate via Chrome DevTools Performance tab).
   - `< 2MB` initial 3D asset load (validate via Lighthouse / Network tab).
   - Lighthouse Performance Score: > 85 on desktop.
+  - **Strategy:** Lazy load 3D canvas `<Suspense>`, code-split routes, use Draco WASM compression for glTF models, and preload critical fonts/CSS.
 - [ ] **AI Blueprint — LOCKED: OpenAI API** **(Owner: Full-Stack Engineer)**
   - Setup Express/Node.js backend with `/api/chat` endpoint using OpenAI GPT-4o-mini.
   - Configure MongoDB Atlas for lead capture + conversation storage.
+  - **Scale Protection:** Implement strict API rate limiting (upstash/redis or express-rate-limit), cache frequent queries, and set hard OpenAI billing caps to prevent budget drain from bots/viral spikes.
   - Phase 2 scope: Basic chatbot widget on the agency V1 site.
 
 > **✅ Phase 2 — Definition of Done:** All CI/CD pipelines are **green on push**, Lighthouse score **> 85** on desktop, chatbot widget is **live** on `crazyweb.studio`, and the `dev` branch protection rule is active. All 5 conditions must be true before Phase 3 begins.
@@ -178,6 +183,8 @@ We are a core team of 5 Specialists (**The Crazy 5**) based in Indore, combining
 > **Decision Made:** The Indore Food Guide is **Flagship Prototype 1**. Real Estate is Prototype 2, gated behind P1 completion. No Prototype 3 or 4 until a paying client arrives.
 
 - [ ] **Prototype 1 (FLAGSHIP): The 3D Indore Food Guide** **(Owner: 3D Developer + UX Designer)**
+  - **Timeline:** Week 3 Design/Modeling, Week 4 Integration/Polish.
+  - **Asset Sourcing:** Purchase/Download CC0 low-poly food models, decimate in Blender for web.
   - Floating physics-reactive 3D food models (Spline + R3F).
   - Custom scroll-based camera movement (GSAP ScrollTrigger).
   - Interactive pricing / order links per item.
@@ -212,10 +219,12 @@ We are a core team of 5 Specialists (**The Crazy 5**) based in Indore, combining
   - **Step 1 — Loom Audit:** Record 2-min personalised video auditing their existing site, showing Food Guide/Real Estate demo as the upgrade.
   - **Step 2 — Multi-Touch Outreach:** Email (Day 1) → Instagram DM (Day 3) → LinkedIn (Day 5) → WhatsApp follow-up (Day 7).
   - **Step 3 — Discovery Call:** Use Calendly link embedded in every Loom video and email signature.
+  - **Playbook:** Draft the Discovery Call script focusing on "Revenue lost to bad UI" rather than technical 3D jargon.
 - [ ] **Closing & Operations** **(Owner: Rainmaker)**
   - Use the standard pricing tiers from the Pricing table above.
   - Send proposal via **PandaDoc free tier** (e-signature + tracking).
   - Collect 50% upfront, 50% on delivery — no exceptions.
+  - **Portfolio Release Strategy:** Add standard clause in contract giving us rights to feature the project in our portfolio/socials, and collect written testimonials upon project handover.
 - [ ] **Content Hype: 3 Posts/Reels per Week** **(Owner: QA/Content)**
   - **Channel Priority:** Instagram (primary) → LinkedIn (leads) → Twitter/X (dev credibility).
   - Content mix: Process videos (build in public) + Demo reels + Client testimonials (once available).

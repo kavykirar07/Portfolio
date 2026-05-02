@@ -2,9 +2,25 @@ import React, { useRef, useMemo, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Float, MeshDistortMaterial, Environment, Stars } from '@react-three/drei'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, ChevronDown } from 'lucide-react'
+import { ArrowRight, ChevronDown, Zap } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import * as THREE from 'three'
+
+/* ── WebGL Capability Check ─────────────────────────────────── */
+function detectWebGLCapabilities() {
+  if (typeof window === 'undefined') return { supported: false, maxTextureSize: 0 }
+  try {
+    const canvas = document.createElement('canvas')
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+    if (!gl) return { supported: false, maxTextureSize: 0 }
+    return {
+      supported: true,
+      maxTextureSize: (gl as WebGLRenderingContext).getParameter((gl as WebGLRenderingContext).MAX_TEXTURE_SIZE),
+    }
+  } catch (e) {
+    return { supported: false, maxTextureSize: 0 }
+  }
+}
 
 /* ── 3D Object: Anti-Gravity Glass Orb with Scroll Link ─────── */
 function GlassOrb() {
@@ -244,6 +260,13 @@ const Hero3D: React.FC = () => {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const sectionRef = useRef<HTMLElement>(null)
+  const [capabilities, setCapabilities] = React.useState({ supported: true, maxTextureSize: 8192 })
+
+  React.useEffect(() => {
+    setCapabilities(detectWebGLCapabilities())
+  }, [])
+
+  const isLowTier = !capabilities.supported || capabilities.maxTextureSize < 4096
 
   // Track scroll progress for the 3D scroll-link effect
   const { scrollYProgress } = useScroll({
@@ -294,23 +317,38 @@ const Hero3D: React.FC = () => {
           {/* Left: Text with Character Reveal */}
           <HeroText isDark={isDark} />
 
-          {/* Right: 3D Canvas with Scroll-Linked Planet */}
-          <div className="hidden lg:block h-[500px] w-full">
-            <Canvas
-              className="no-transition"
-              camera={{ position: [0, 0, 5], fov: 55 }}
-              gl={{ antialias: true, alpha: true }}
-            >
-              <Suspense fallback={null}>
-                <ambientLight intensity={isDark ? 0.15 : 0.4} />
-                <pointLight position={[3, 3, 3]} intensity={isDark ? 2 : 1.5} color="#ADFF2F" />
-                <pointLight position={[-3, -2, 2]} intensity={isDark ? 1.5 : 1} color="#00F0FF" />
-                <pointLight position={[0, -4, 1]} intensity={0.5} color="#ffffff" />
-                <GlassOrb />
-                {isDark && <Stars radius={80} depth={40} count={1500} factor={3} fade />}
-                <Environment preset={isDark ? 'night' : 'sunset'} />
-              </Suspense>
-            </Canvas>
+          {/* Right: 3D Canvas with Scroll-Linked Planet or Fallback */}
+          <div className="hidden lg:block h-[500px] w-full relative">
+            {isLowTier ? (
+              <div className={`w-full h-full flex flex-col items-center justify-center rounded-2xl border ${isDark ? 'border-white/10 bg-white/5' : 'border-black/10 bg-black/5'}`}>
+                <div className={`w-32 h-32 rounded-full mb-6 relative animate-pulse ${isDark ? 'bg-cyber-lime/20' : 'bg-indigo-500/20'}`}>
+                  <div className={`absolute inset-2 rounded-full ${isDark ? 'bg-cyber-lime/40' : 'bg-indigo-500/40'}`} />
+                  <div className={`absolute inset-4 rounded-full ${isDark ? 'bg-cyber-lime' : 'bg-indigo-500'} flex items-center justify-center`}>
+                     <Zap className={isDark ? 'text-black' : 'text-white'} size={24} />
+                  </div>
+                </div>
+                <h3 className={`font-outfit font-bold text-xl mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Performance Mode</h3>
+                <p className={`font-inter text-sm text-center max-w-xs ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
+                  3D experience disabled for optimal performance on your device.
+                </p>
+              </div>
+            ) : (
+              <Canvas
+                className="no-transition"
+                camera={{ position: [0, 0, 5], fov: 55 }}
+                gl={{ antialias: true, alpha: true }}
+              >
+                <Suspense fallback={null}>
+                  <ambientLight intensity={isDark ? 0.15 : 0.4} />
+                  <pointLight position={[3, 3, 3]} intensity={isDark ? 2 : 1.5} color="#ADFF2F" />
+                  <pointLight position={[-3, -2, 2]} intensity={isDark ? 1.5 : 1} color="#00F0FF" />
+                  <pointLight position={[0, -4, 1]} intensity={0.5} color="#ffffff" />
+                  <GlassOrb />
+                  {isDark && <Stars radius={80} depth={40} count={1500} factor={3} fade />}
+                  <Environment preset={isDark ? 'night' : 'sunset'} />
+                </Suspense>
+              </Canvas>
+            )}
           </div>
         </div>
       </div>

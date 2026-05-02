@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import OpenAI from 'openai'
 import mongoose from 'mongoose'
+import rateLimit from 'express-rate-limit'
 
 const app = express()
 // Render usually uses port 10000, local uses 3001
@@ -62,8 +63,16 @@ app.post('/api/contact', async (req, res) => {
   }
 })
 
-// 4. AI Chat Route
-app.post('/api/chat', async (req, res) => {
+// 4. AI Chat Route (Rate Limited for Cost Protection)
+const chatLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 15, // limit each IP to 15 requests per windowMs
+  message: { error: "Too many requests to the AI chat. Please try again later." },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+
+app.post('/api/chat', chatLimiter, async (req, res) => {
   const { messages } = req.body
   if (!messages || !Array.isArray(messages)) return res.status(400).json({ error: 'messages array is required' })
 
