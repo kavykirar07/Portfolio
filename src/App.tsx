@@ -7,6 +7,7 @@ import Lenis from '@studio-freight/lenis'
 /* ── Lazy-load heavy 3D sections ─────────────────────────────── */
 const Hero3D = React.lazy(() => import('./components/Hero3D'))
 const ServicesSection = React.lazy(() => import('./components/ServicesSection'))
+const OurWorkSection = React.lazy(() => import('./components/OurWorkSection'))
 const FoodGuideSection = React.lazy(() => import('./components/FoodGuideSection'))
 const TheTeam = React.lazy(() => import('./components/TheTeam'))
 const ThePortal = React.lazy(() => import('./components/ThePortal'))
@@ -98,6 +99,11 @@ const App: React.FC = () => {
         {/* Section 2: Services */}
         <Suspense fallback={<DimensionFallback />}>
           <ServicesSection />
+        </Suspense>
+
+        {/* Section 2.5: Our Work */}
+        <Suspense fallback={<DimensionFallback />}>
+          <OurWorkSection />
         </Suspense>
 
         {/* Section 3: Food Guide Prototype */}
