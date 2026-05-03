@@ -8,7 +8,6 @@ import Lenis from '@studio-freight/lenis'
 const Hero3D = React.lazy(() => import('./components/Hero3D'))
 const ServicesSection = React.lazy(() => import('./components/ServicesSection'))
 const OurWorkSection = React.lazy(() => import('./components/OurWorkSection'))
-const FoodGuideSection = React.lazy(() => import('./components/FoodGuideSection'))
 const TheTeam = React.lazy(() => import('./components/TheTeam'))
 const ThePortal = React.lazy(() => import('./components/ThePortal'))
 
@@ -106,10 +105,6 @@ const App: React.FC = () => {
           <OurWorkSection />
         </Suspense>
 
-        {/* Section 3: Food Guide Prototype */}
-        <Suspense fallback={<DimensionFallback />}>
-          <FoodGuideSection />
-        </Suspense>
 
         {/* Section 4: The Crazy 5 — Ownership Matrix */}
         <Suspense fallback={<DimensionFallback />}>
