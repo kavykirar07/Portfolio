@@ -36,11 +36,11 @@ const projects: Project[] = [
     color: '#ADFF2F'
   },
   {
-    id: 'proj-staysphere',
-    title: 'StaySphere',
-    category: 'Web App',
-    description: 'A full-stack property rental application with complex CRUD operations, booking endpoints, and a comprehensive admin dashboard.',
-    techStack: ['MERN Stack', 'Express', 'MongoDB', 'Redux'],
+    id: 'proj-cafeco.',
+    title: 'Cafe.co',
+    category: 'Landing Page',
+    description: 'A high-end landing page designed to bridge the gap between physical spaces and digital interfaces.',
+    techStack: ['HTML', 'Next.js', 'Tailwind CSS', 'Framer Motion'],
     image: 'radial-gradient(circle at 50% 50%, #101820, #000000)',
     color: '#00F0FF'
   },
@@ -117,12 +117,12 @@ const OurWorkSection: React.FC = () => {
                 ${isDark ? 'border-white/5 hover:border-white/20' : 'border-black/5 hover:border-black/20'}
               `}>
                 {/* Visual Placeholder (Could be an actual image or 3D canvas later) */}
-                <div 
+                <div
                   className="w-full h-48 lg:h-60 relative overflow-hidden flex items-center justify-center border-b border-white/5"
                   style={{ background: project.image }}
                 >
                   <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
-                  
+
                   {/* Subtle hover overlay effect */}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
                     <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-md translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
@@ -138,11 +138,11 @@ const OurWorkSection: React.FC = () => {
                       {project.category}
                     </span>
                   </div>
-                  
+
                   <h3 className={`font-outfit font-bold text-2xl mb-3 transition-colors ${isDark ? 'text-white group-hover:text-cyber-lime' : 'text-gray-900 group-hover:text-indigo-600'}`}>
                     {project.title}
                   </h3>
-                  
+
                   <p className={`font-inter text-sm mb-6 flex-grow ${isDark ? 'text-white/60' : 'text-gray-500'}`}>
                     {project.description}
                   </p>
